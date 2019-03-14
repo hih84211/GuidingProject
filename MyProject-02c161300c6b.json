@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "watchful-pier-204112",
+  "private_key_id": "02c161300c6bae6096a7a5721c0df6cafd672f30",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDrylFgypgXsOa/\nT7wh+Hm8GG89yDrS2SGqVku7C3gZfEOSFCQx8OrnnDO91STlaeuGV4NsF9T90X+h\naBjdMKVT1gLOZxcDSWShXH7XC2PVtmN0d1QoVLikJUFLCJA+kkt/PTDt7OTYmJ2L\n77UHT3alD6zuLBRUzlaRr+kJyxcbdXs2m9OoUdcXp3sS9P/mUxBIcg99ZlgkQGyo\nlk2ubbaG+KkD76Sl9IuyLrPawLrUl6Rqz+bT/62o/ixrF8I0XVeLSpEcEK3brJ8Z\nSdC0z9eCk4p2hOZijN+xRQ16w2/KOw11IOxmWGjdZEvnW1aBUhGGqGx3iDfc/lD+\n+Nx1Af/1AgMBAAECggEAKwBKtww7kJaCfoFcHhXinZsXLn1FvQ48RYRXa1U8Iem3\nqPxjXXhCXtrt1MD6aZxXh7iODziJb4C1dgo1/qDQhemRuXKzj7Xi1Eq6Fx3Mpz0M\nBkF8554LzmO89KIrLD4h5qKSOdHqKlYq5UpiCWNEj/W74/PGAXFf+FHMfiy7mhYJ\nNUg1ZwnqoGomTsK6nxuOpVql5iEpiB+WnmEni6ocNmEK0p2Eg98a0nNdmHiob4XD\nhZNbi8TTuqjcBg9x7qdnL0HihN4Qu4/ZXSQSulRALmaJ4yHkXeuIvtLcTQObF/1V\nzRasbyHN43vcFzM2q4ghGgS/RShPwq7sjqdlFffkQQKBgQD2i0kf8woNaVYyxy0L\npQV06zN6n1uIn0U1PXKbXNPDwuUg1B/lSXwxSngeJHbk32Z8NAlCWTv7cj98FFTU\nQgA+M8YRr6F6p/MHdle5dtZ4aYMjuPMoBf9W6btntsQMvZ9dtvsUB2FVEgOVeDl3\nzqoaoA7Ql/fOC7Z6Rjmkx5AjYwKBgQD01XIAfW8pwm9L3/p5L1mmT64P4aklrpiL\nbK+8U0eH1O13UOALaWpUi7xo6DB0zBsoqBBMxBha1dUqBaM6wNB3GaL12sXIwe9K\nl7D61PUIrf8WruxmSmREXAXPlAVhxdSfaZNOesMM07yRA4nBQI+0XsOQAluIFSoK\nLd37E0rqxwKBgQDafN9mB/2Nmx8/ytF5s1ndnp61ecoljnhH0VfipWYp42spJ7PI\nf9Im4IcIt2oCNJTfV0IpYWlN0Za/QElY/dC3Tyyl+c6SI4q1v0PI4a75cRA9tScP\n/himDmb9Z7PgUp+L7qAdxNiWCmvQp4XOTgDjrZrTcwmxuSGSxO9Kv2xWXwKBgGyJ\nVwGKmcYccPRk9YfVitukhRh7RF31GaDtbLaDALnhlegIDVphwAZ87+hdzmVouj16\ny8cMQ3O5ScdYOnVoVsIFtm1hL78A4lDiEE4SLBJN+ECZCSmLnwmC9fyAtSYT6l9F\nEU2ANImyL+zlcaMfONWQEQf9U5BvOXTLwpV0hwivAoGAc9GpSXjq0H2VD8Oc/S3a\nUpB2gaQRSsVL2YdmytJSXZjG+1iIVqvB9EqidMTR/2rxTCZ5uUVbrTqR9WAt5CtK\nbFkWKdzkNZoq5yPVX0tPjZ79EHzAlxGNsM2XwDnuNEHOKY+TD6+ZeerxKxxzd9gf\ne61UJyqoSwu/lzXbTC/bt0Y=\n-----END PRIVATE KEY-----\n",
+  "client_email": "notsosmartglasses@watchful-pier-204112.iam.gserviceaccount.com",
+  "client_id": "110901677607794439408",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/notsosmartglasses%40watchful-pier-204112.iam.gserviceaccount.com"
+}

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">BluetoothConectionApp</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="unconnected">Unconnected</string>
+    <string name="get_paired_devices">Get Paired Devices</string>
+    <string name="discover_new_devices">Discover new devices</string>
+    <string name="backdoor">backdoor</string>
+    <string name="status_connected">Connected</string>
+    <string name="status_connecting">Connecting...</string>
+    <string name="status_not_connected">Not connected</string>
+    <string name="BTunsupport">您的藍芽裝置不支援。</string>
+    <string name="ok">好ㄅ</string>
+</resources>
