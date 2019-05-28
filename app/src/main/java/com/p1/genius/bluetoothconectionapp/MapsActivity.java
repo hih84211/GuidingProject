@@ -53,7 +53,8 @@ import java.util.Objects;
  * 而我們曾試圖增加"不正常斷線後得自動重新連線"功能，使機車騎士不需在斷線後還得停車重手動連線
  * 卻礙於時間限制只完成了部分程式碼，剩下的工作就寄託在你們身上了
  * (自動連線有很多方式，我選了一個不是很好的。所以你們可以自行決定要沿用或者直接砍掉重寫)
- */
+**/
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener
 {
@@ -74,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Button bStart;    // 按下去之後就會開始導航喔
     private Button bStop;    // 按下去之後就會結束導航喔
     private LatLng mLocation;    // 使用者座標
-    private LatLng desLocation;    // 目的地座標
+    private LatLng desLocation = null;    // 目的地座標
     private GuidingThread mGuidingThread;    // 負責導航任務的執行緒
     private static final int REQUEST_LOCATION = 2;    // 權限的請求代碼
     private BluetoothController mController = null;    // 就是用來那個那個的BluetoothController物件
@@ -104,7 +105,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     break;
                 case Constants.GUIDING_ERROR:
                     activity.mGuidingThread = null;
-                    activity.nailedIt();
+                    if(activity.desLocation == null)
+                        activity.nailedIt(activity.mLocation);
+                    else
+                        activity.nailedIt(activity.desLocation);
                     break;
                 case Constants.NEW_RESULT:
                     activity.makeItVisible(activity.mGuidingThread.getmResult());
@@ -323,7 +327,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 15));
                         if(mGuidingThread == null)    // 若無進行中的導航工作，就在焦點(使用者所在位置)座標放置大頭針
                         {
-                            nailedIt();
+                            nailedIt(mLocation);
                         }
                     }
                 }
@@ -392,7 +396,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         {
             mGuidingThread.cancel();
             mGuidingThread = null;
-            nailedIt();
+            nailedIt(desLocation);
             if (locationUpdateRequested)
             {
                 locationUpdateRequested = false;
@@ -408,11 +412,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    private void nailedIt()    // 在使用者座標放置大頭針
+    private void nailedIt(LatLng p)    // 輸入座標p，並在p點放置大頭針
     {
         mMap.clear();    // 先將地圖標示清空
         desMark = mMap.addMarker(new MarkerOptions()
-                .position(mLocation)
+                .position(p)
                 .draggable(true));    // 設定大頭針可被拖移
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener()
         {
@@ -460,7 +464,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                             new LatLng(location.getLatitude(), location.getLongitude()),
                             15));
-                    nailedIt();
+                    nailedIt(mLocation);
                 }
             }
         });

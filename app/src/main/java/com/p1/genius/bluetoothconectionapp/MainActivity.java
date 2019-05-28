@@ -27,7 +27,7 @@ import java.lang.ref.WeakReference;
 import java.util.Set;
 
 /**
- *這裡是使用者打開APP看到的主畫面的程式碼這樣
+ * 這裡是使用者打開APP看到的主畫面的程式碼這樣
  * 若和Arduino藍芽模組成功建立連線，則會開啟導航畫面
  **/
 public class MainActivity extends AppCompatActivity
@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity
             //檢查手機是否支援藍芽通訊
             new AlertDialog.Builder(this).setMessage(R.string.BTunsupport).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
             {
-
                 @Override
                 public void onClick(DialogInterface dialog, int which)  //按下確認後要做甚麼事可以寫在這裡。(我保留了結束整個APP的指令，不需要的話可以拿掉)
                 {
