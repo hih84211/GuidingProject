@@ -9,12 +9,15 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 class DirRequestTask extends AsyncTask<Void, Void, Void>
 {
     private String key = "AIzaSyAHG_MzhRM-5IsfnKDi-cqKT7VS4ssv64Q";
+    private Double location[] = {0.0, 0.0, 0.0};
+
     @Override
     protected Void doInBackground(Void... params)
     {
@@ -38,6 +41,16 @@ class DirRequestTask extends AsyncTask<Void, Void, Void>
             try
             {
                 mJSON = new JSONObject(sb.toString());
+
+
+                if("OK".equals(mJSON.get("status")))
+                {
+                    JSONArray result = new JSONArray(mJSON.get("results").toString());
+                    JSONObject Jlocation = result.getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
+                    location[0] = 1.;
+                    location[1] = Jlocation.getDouble("lat");
+                    location[2] = Jlocation.getDouble("lng");
+                }
             }
             catch (JSONException e)
             {

@@ -114,11 +114,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     activity.makeItVisible(activity.mGuidingThread.getmResult());
                     break;
                 case MessageConstants.MESSAGE_READ:    // 若有需要從Arduino 端接收訊息，以下程式碼請自取(不敢保證是否能運作)
-                    /*String readMessage = "";
-                    try
+
+                    /*try
                     {
                         readMessage = new String((byte[]) msg.obj, "UTF-8");
-                        _recieveData = readMessage; //拼湊每次收到的字元成字串
+                        recieveData = readMessage; //拼湊每次收到的字元成字串
                     }
                     catch (UnsupportedEncodingException e)
                     {
