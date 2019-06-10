@@ -12,6 +12,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +23,7 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,7 +41,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.maps.android.PolyUtil;
 import com.google.maps.model.DirectionsResult;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Objects;
 
@@ -74,12 +86,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker desMark;    // 目的地標示
     private Button bStart;    // 按下去之後就會開始導航喔
     private Button bStop;    // 按下去之後就會結束導航喔
+    private TextView addrSearch;
     private LatLng mLocation;    // 使用者座標
     private LatLng desLocation = null;    // 目的地座標
     private GuidingThread mGuidingThread;    // 負責導航任務的執行緒
     private static final int REQUEST_LOCATION = 2;    // 權限的請求代碼
     private BluetoothController mController = null;    // 就是用來那個那個的BluetoothController物件
     private BroadcastReceiver BTreceiver = null;    // 為了自動重新連線而存在的廣播接收器
+    private DirRequestTask locationSearch = null;
     static class mHandler extends Handler    // 接收訊息(座標變更、藍芽連線狀況等訊息)的handler 類別
     {
         private final WeakReference<MapsActivity> mactivity;
@@ -213,6 +227,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         */
         bStart = findViewById(R.id.start);
         bStop = findViewById(R.id.stop);
+        addrSearch = findViewById(R.id.location);
     }
 
     @Override
@@ -259,6 +274,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         if (mGuidingThread != null)
             mGuidingThread.cancel();
+
+        if(locationSearch != null)
+        {
+            if(locationSearch.getStatus() != AsyncTask.Status.FINISHED)
+                locationSearch.cancel(true);
+        }
         mapClient.disconnect();
     }
 
@@ -405,6 +426,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    public void addrSearch(View v)
+    {
+        if (mGuidingThread != null)
+        {
+            mGuidingThread.cancel();
+            mGuidingThread = null;
+            if (locationUpdateRequested)
+            {
+                locationUpdateRequested = false;
+                locationManager.removeUpdates(this);
+            }
+        }
+        if(locationSearch == null)
+        {
+            locationSearch = new DirRequestTask();
+            locationSearch.execute(addrSearch.getText().toString());
+        }
+        else if(locationSearch.getStatus() != AsyncTask.Status.FINISHED)
+        {
+            locationSearch.cancel(true);
+            locationSearch = new DirRequestTask();
+            locationSearch.execute(addrSearch.getText().toString());
+        }
+        else{
+            locationSearch = new DirRequestTask();
+            locationSearch.execute(addrSearch.getText().toString());
+        }
+    }
+
 
     public synchronized void setState(boolean state)    // isConnected 的set 方法
     {
@@ -546,6 +596,97 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         List<LatLng> decodedPath = PolyUtil.decode(results.routes[0].overviewPolyline.getEncodedPath());
         mMap.addPolyline(new PolylineOptions().addAll(decodedPath));
     }
+
+
+    private class DirRequestTask extends AsyncTask<String, Void, Double[]>
+    {
+        private String key = "AIzaSyAHG_MzhRM-5IsfnKDi-cqKT7VS4ssv64Q";
+        private Double location[] = {0.0, 0.0, 0.0};
+
+        @Override
+        protected Double[] doInBackground(String... params)
+        {
+            String urlrqst = getRequestUrl(params[0]);
+            StringBuilder sb = new StringBuilder();
+            JSONObject mJSON;
+
+            try
+            {
+                URL url = new URL(urlrqst);
+                BufferedReader read = new BufferedReader(new InputStreamReader
+                        (url.openStream()));
+                String line = read.readLine();
+                while(line != null)
+                {
+                    Log.d("direction JSON:", urlrqst);
+                    sb.append(line);
+                    line = read.readLine();
+                }
+
+                try
+                {
+                    mJSON = new JSONObject(sb.toString());
+
+
+                    if("OK".equals(mJSON.get("status")))
+                    {
+                        JSONArray result = new JSONArray(mJSON.get("results").toString());
+                        JSONObject Jlocation = result.getJSONObject(0).getJSONObject("geometry").getJSONObject("location");
+                        location[0] = 1.;
+                        location[1] = Jlocation.getDouble("lat");
+                        location[2] = Jlocation.getDouble("lng");
+                        return location;
+                    }
+                }
+                catch (JSONException e)
+                {
+                    Log.e("JSON Error: ", e.getLocalizedMessage());
+                }
+            }
+            catch (MalformedURLException e)
+            {
+                e.printStackTrace();
+                Log.e("Direction Error",e.getMessage());Log.e("Direction Error",e.getMessage());Log.e("Direction Error",e.getMessage());
+            }
+            catch (IOException e)
+            {
+                Log.e("Direction Error",e.getMessage());Log.e("Direction Error",e.getMessage());Log.e("Direction Error",e.getMessage());
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Double[] result)
+        {
+            super.onPostExecute(result);
+            if(result[0] == 1.0)
+            {
+                desLocation = new LatLng(result[1], result[2]);
+                nailedIt(desLocation);
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                        new LatLng(desLocation.latitude, desLocation.longitude),
+                        15));
+            }
+            else
+                {
+                    Log.e("Direction Error", "No result");Log.e("Direction Error","No result");Log.e("Direction Error","No result");
+                }
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+        private String getRequestUrl(String addr)
+        {
+            String address = "address=" + addr;
+            String param = address + "&key=" + key;
+            return "https://maps.googleapis.com/maps/api/geocode/json?" + param;
+        }
+    }
+
 }
 
 

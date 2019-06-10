@@ -22,6 +22,22 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
+        <EditText
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="10"
+            android:ems="10"
+            android:inputType="textPostalAddress" />
+
+        <Button
+            android:id="@+id/bsearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="addrSearch"
+            android:text="search" />
+
         <Button
             android:id="@+id/testSTR"
             android:layout_width="wrap_content"
