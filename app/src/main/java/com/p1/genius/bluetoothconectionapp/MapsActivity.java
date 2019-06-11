@@ -534,7 +534,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     /**
      *  建立與Google Location Service 伺服器連線的程式碼。
      *  Google Location Service 功能與Android 內鍵Location Manager 差不多(好像又更強吧)，
-     *  而且不因受ndroid 作業系統版本差異的影響(有的程式碼run在不同版本的系統上，會有非常不同的結果。很神奇對吧!)。
+     *  而且不因受android 作業系統版本差異的影響(有的程式碼run在不同版本的系統上，會有非常不同的結果。很神奇對吧!)。
      *  但我不知道如何只使用Google Location Service 就好(節省系統資源)，所以保留兩種方式。
      *  建議日後留下一個當作主力。
      */
