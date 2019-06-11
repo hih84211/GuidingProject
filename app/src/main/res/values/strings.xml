@@ -10,4 +10,10 @@
     <string name="status_not_connected">Not connected</string>
     <string name="BTunsupport">您的藍芽裝置不支援。</string>
     <string name="ok">好ㄅ</string>
+    <string-array name="mapTypes">
+        <item>Normal</item>
+        <item>SATELLITE</item>
+        <item>TERRAIN</item>
+        <item>HYBRID</item>
+    </string-array>
 </resources>

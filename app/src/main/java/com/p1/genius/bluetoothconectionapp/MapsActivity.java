@@ -22,7 +22,10 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
@@ -84,6 +87,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleApiClient mapClient;    // 取得Google 各樣服務的介面(已經被捨棄，需修改)
     private GoogleMap mMap;    // 地圖本人，多說無益
     private Marker desMark;    // 目的地標示
+    private Spinner type_spinner;
     private Button bStart;    // 按下去之後就會開始導航喔
     private Button bStop;    // 按下去之後就會結束導航喔
     private TextView addrSearch;
@@ -199,17 +203,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
-
-
         /*
         * 以下是Android 取用Google地圖的初始設定(不重要，不用研究)
         * 但假如哪天地圖突然沒辦法顯示，記得檢查這裡，可能有些方法已經失效(Google是善變的)
         */
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        mapFragment.getMapAsync(this);*/
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
@@ -221,6 +224,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .addApi(LocationServices.API)
                 .build();
         mapClient.connect();
+        processViews();
+        processControllers();
 
         /*
         * 取得Activity存放之各原件的記憶體位置
@@ -228,6 +233,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bStart = findViewById(R.id.start);
         bStop = findViewById(R.id.stop);
         addrSearch = findViewById(R.id.location);
+    }
+
+    ////////////////////////////////////    Map Type 專區    ///////////////////////////////////////
+
+    private void processViews()
+    {
+        SupportMapFragment mapFragment = (SupportMapFragment)  //21-4
+                getSupportFragmentManager().findFragmentById(R.id.map);  //21-4
+        mapFragment.getMapAsync(this);  //21-4
+        type_spinner = (Spinner) findViewById(R.id.MapTypes);
+        ArrayAdapter<CharSequence> adapter =
+                ArrayAdapter.createFromResource(this, R.array.mapTypes, android.R.layout.simple_dropdown_item_1line);
+        //21-3 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        type_spinner.setAdapter(adapter);
+/*21-4
+        //title_panel = (LinearLayout) findViewById(R.id.title_panel);
+        //menu_panel = (LinearLayout)  findViewById(R.id.menu_panel);
+21-4*/
+    }
+
+    private void processControllers() {
+        type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position == 0)
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                else if (position == 1)
+                    mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                else if (position == 2)
+                    mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                else if (position == 3)
+                    mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
     }
 
     @Override
